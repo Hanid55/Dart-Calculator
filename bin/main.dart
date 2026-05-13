@@ -16,11 +16,12 @@ void printBanner() {
 void printMenu() {
   print('''
   ┌─────────────────────────────────────────┐
-  │  1 ▸  Basic Calculator (+ - * / ^ %)   │
-  │  2 ▸  Expression Mode  (e.g. 3+4*2)    │
-  │  3 ▸  View History                      │
-  │  4 ▸  Clear History                     │
-  │  5 ▸  Exit                              │
+  │  1 ▸  Basic Calculator (+ - * / ^ %)    │
+  │  2 ▸  Expression Mode  (e.g. 3+4*2)     │
+  │  3 ▸  View History                     │
+  │  4 ▸  Average                          │
+  │  5 ▸  Clear History                     │
+  │  6 ▸  Exit                              │
   └─────────────────────────────────────────┘
   Enter choice: ''');
 }
@@ -58,13 +59,13 @@ void runBasicMode(Calculator calc) {
       case '^': result = calc.power(a, b);
       case '%': result = calc.modulo(a, b);
       default:
-        print('  ❌ Unknown operator: $op\n');
+        print('  Unknown operator: $op\n');
         return;
     }
     expression = '$a $op $b = $result';
   }
 
-  print('\n  ✅ Result: $result\n');
+  print('\n  Result: $result\n');
   calc.addToHistory(expression);
 }
 
@@ -76,11 +77,42 @@ void runExpressionMode(Calculator calc) {
 
   try {
     final result = calc.evaluate(expr);
-    print('\n  ✅ $expr = $result\n');
+    print('\n  $expr = $result\n');
     calc.addToHistory('$expr = $result');
   } catch (e) {
-    print('\n  ❌ Error: $e\n');
+    print('\n  Error: $e\n');
   }
+}
+void runAverageMode(Calculator calc) {
+  print('\n  ── Average Calculator ────────────────────');
+  print('  Enter numbers one by one.');
+  print('  Type "done" when finished.\n');
+
+  List<double> numbers = [];
+
+  while (true) {
+    stdout.write('  Enter number (or "done"): ');
+    final input = stdin.readLineSync()?.trim() ?? '';
+
+    if (input.toLowerCase() == 'done') break;
+
+    final value = double.tryParse(input);
+    if (value != null) {
+      numbers.add(value);
+      print(' Added. Numbers so far: $numbers\n');
+    } else {
+      print('  Invalid number, try again.\n');
+    }
+  }
+
+  if (numbers.isEmpty) {
+    print('  No numbers entered.\n');
+    return;
+  }
+
+  final result = calc.average(numbers);
+  print('\n  Average of $numbers = $result\n');
+  calc.addToHistory('Average of $numbers = $result');
 }
 
 void main() {
@@ -98,11 +130,14 @@ void main() {
         try { runBasicMode(calculator); } catch (e) { print('  ❌ $e\n'); }
       case '2':
         runExpressionMode(calculator);
-      case '3':
-        calculator.showHistory();
+       case '3':
+        runAverageMode(calculator);
       case '4':
-        calculator.clearHistory();
+        calculator.showHistory();
+  
       case '5':
+        calculator.clearHistory();
+      case '6':
         print('  👋 Goodbye!\n');
         exit(0);
       default:

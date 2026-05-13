@@ -18,7 +18,11 @@ class Calculator {
     if (n < 0) throw ArgumentError('Cannot square root a negative number!');
     return sqrt(n);
   }
-
+ double average(List<double> numbers) {
+  if (numbers.isEmpty) throw ArgumentError('No numbers provided!');
+  double sum = numbers.reduce((a, b) => a + b);
+  return sum / numbers.length;
+}
   double modulo(double a, double b) {
     if (b == 0) throw ArgumentError('Cannot modulo by zero!');
     return a % b;
