@@ -1,0 +1,14 @@
+{
+  "roots": [
+    "dart_calculator"
+  ],
+  "packages": [
+    {
+      "name": "dart_calculator",
+      "version": "1.0.0",
+      "dependencies": [],
+      "devDependencies": []
+    }
+  ],
+  "configVersion": 1
+}
