@@ -1,19 +1,6 @@
-// bin/main.dart
-// ─────────────────────────────────────────────────────────────────────
-// CLI Calculator — updated to meet all assignment requirements:
-//   ✅ Input validation via readNumber()
-//   ✅ No switch statements (uses if/else if chains)
-//   ✅ [INFO] / [ERROR] output format
-//   ✅ Keeps asking until a valid menu choice is entered
-//   ✅ Repeat last calculation feature
-//   ✅ Modulus, Power, Average, History, Clear History
-// ─────────────────────────────────────────────────────────────────────
 
 import 'dart:io';
 import '../lib/calculator.dart';
-
-// ── Output Helpers ────────────────────────────────────────────────────
-// Requirement #6: Use [INFO] and [ERROR] tags for all output
 
 void info(String message) {
   print('  [INFO] $message');
@@ -50,44 +37,26 @@ void printMenu() {
   └──────────────────────────────────────────────┘''');
 }
 
-// ── Requirement #2: Reusable readNumber function ──────────────────────
-// Takes a prompt message, keeps asking until the user types a valid number.
-// Returns a double.
-//
-// Why double? Because doubles handle both whole numbers (10) and decimals
-// (3.14), making the calculator more flexible than using int.
-//
-// Why is stdin.readLineSync() nullable?
-// Because stdin can theoretically return null if the stream closes
-// (e.g. piped input that ends). The ?. and ?? handle this safely.
-
 double readNumber(String message) {
   while (true) {
     stdout.write('  $message');
 
-    // stdin.readLineSync() is nullable — use ?. to safely call trim()
-    // and ?? '' as a fallback if it returns null
+ 
     final input = stdin.readLineSync()?.trim() ?? '';
 
-    // double.tryParse returns null if input is not a valid number
-    // This is input validation — requirement #1
     final value = double.tryParse(input);
 
     if (value != null) {
-      return value; // valid number — exit the loop
+      return value;
     }
 
-    // If we reach here, input was invalid
+   
     error('Invalid input. Please enter a number.\n');
 
-    // Why continue? It skips the rest of the loop body and goes back
-    // to the top — keeps asking without exiting the while loop.
+
     continue;
   }
 }
-
-// ── Requirement #7: Valid menu choice loop ────────────────────────────
-// Keeps asking until the user enters 1–7. No switch used.
 
 String readMenuChoice() {
   final validChoices = ['1', '2', '3', '4', '5', '6', '7'];
@@ -104,7 +73,6 @@ String readMenuChoice() {
   }
 }
 
-// ── Mode Functions ────────────────────────────────────────────────────
 
 String runBasicMode(Calculator calc) {
   print('\n  ── Basic Calculator ──────────────────────');
@@ -117,7 +85,7 @@ String runBasicMode(Calculator calc) {
   double result;
   String expression;
 
-  // Requirement #8: No switch — using if/else if instead
+
   if (op == 's') {
     result = calc.squareRoot(a);
     expression = '√$a = $result';
@@ -150,7 +118,7 @@ String runBasicMode(Calculator calc) {
     return '';
   }
 
-  // Requirement #6: [INFO] format
+ 
   info('Result = $result\n');
   calc.addToHistory(expression);
   return expression;
@@ -185,7 +153,7 @@ String runAverageMode(Calculator calc) {
     stdout.write('  Enter number (or "done"): ');
     final input = stdin.readLineSync()?.trim() ?? '';
 
-    // break exits the loop entirely — we're done collecting numbers
+   
     if (input.toLowerCase() == 'done') break;
 
     final value = double.tryParse(input);
